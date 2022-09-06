@@ -1,0 +1,18 @@
+[05-Sep-2022 21:27:07 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/gamesens10/temp.gamesense.ltd/forums/include/parser.php on line 98
+[05-Sep-2022 21:27:07 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/gamesens10/temp.gamesense.ltd/forums/include/functions.php on line 2066
+[05-Sep-2022 21:27:07 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/gamesens10/temp.gamesense.ltd/forums/include/functions.php on line 2066
+[05-Sep-2022 22:46:25 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home/gamesens10/temp.gamesense.ltd/forums/chat.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/gamesens10/temp.gamesense.ltd/forums/chat.php on line 9
+[05-Sep-2022 22:47:47 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home/gamesens10/temp.gamesense.ltd/forums/chat.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/gamesens10/temp.gamesense.ltd/forums/chat.php on line 10
+[05-Sep-2022 22:47:49 UTC] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home/gamesens10/temp.gamesense.ltd/forums/chat.php:10
+Stack trace:
+#0 {main}
+  thrown in /home/gamesens10/temp.gamesense.ltd/forums/chat.php on line 10
+[05-Sep-2022 22:49:07 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/gamesens10/temp.gamesense.ltd/forums/chat.php on line 8
+[05-Sep-2022 22:49:08 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/gamesens10/temp.gamesense.ltd/forums/chat.php on line 8
+[05-Sep-2022 22:49:09 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/gamesens10/temp.gamesense.ltd/forums/chat.php on line 8
