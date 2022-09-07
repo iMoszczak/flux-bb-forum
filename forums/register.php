@@ -92,6 +92,18 @@ if (isset($_POST['form_sent']))
 
 	// Validate username and passwords
 	check_username($username);
+	
+	//INVITE CHECK
+	$userinvite = utf8_trim($_POST['req_invite_code']);
+	$sqlinvite = "SELECT code FROM invites WHERE used='0'";
+	$sqlinvite = $db->query('SELECT code FROM '.$db->prefix.'invites WHERE used=0') or error('Unable to fetch invite', __FILE__, __LINE__, $db->error());
+	$invite = $db->result($sqlinvite);
+	if (!empty($invite) && $userinvite == $invite) {
+		$goodinvite = 1;
+	} else {
+		message('Registration requires an invite.', false, 'Info');
+	}
+	//INVITE CHECK
 
 	if (pun_strlen($password1) < 9)
 		$errors[] = $lang_prof_reg['Pass too short'];
@@ -162,6 +174,16 @@ if (isset($_POST['form_sent']))
 		// Add the user
 		$db->query('INSERT INTO '.$db->prefix.'users (username, group_id, password, email, email_setting, timezone, dst, language, style, registered, registration_ip, last_visit) VALUES(\''.$db->escape($username).'\', '.$intial_group_id.', \''.$password_hash.'\', \''.$db->escape($email1).'\', '.$email_setting.', '.$timezone.' , '.$dst.', \''.$db->escape($language).'\', \''.$pun_config['o_default_style'].'\', '.$now.', \''.$db->escape(get_remote_address()).'\', '.$now.')') or error('Unable to create user', __FILE__, __LINE__, $db->error());
 		$new_uid = $db->insert_id();
+		
+		//MAKE INVITE USED
+		if ($goodinvite == 1) {
+			//$db->query('UPDATE invites SET used=1 WHERE code='.$invite) or error('Unable to create user', __FILE__, __LINE__, $db->error());
+			$query = "UPDATE invites SET used=1 WHERE code='$userinvite'";
+			$query2 = "UPDATE invites SET used_by='$username' WHERE code='$userinvite'";
+			$db->query($query) or error('Unable to update user', __FILE__, __LINE__, $db->error());
+			$db->query($query2) or error('Unable to update user', __FILE__, __LINE__, $db->error());
+		}
+		//MAKE INVITE USED
 
 		if ($pun_config['o_regs_verify'] == '0')
 		{
