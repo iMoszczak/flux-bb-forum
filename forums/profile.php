@@ -667,6 +667,38 @@ else if (isset($_POST['add30days'])) {
 
 // SUBSCRIPTION MODIFICATION
 
+// GIVE INVITE MODIFICATION
+else if (isset($_POST['generateinvite'])) {
+	$user_id=$id;
+	if ($pun_user['g_id'] != PUN_ADMIN && ($pun_user['g_moderator'] != '1' || $pun_user['g_mod_ban_users'] == '0')) {
+	    message($lang_common['No permission']); //User don't have permission to do that
+	}
+	function generateRandomString($length = 48) {
+		return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+	}
+	$randomString = generateRandomString();
+	$date = new DateTime('now');
+	$stringDate = $date->format('Y-m-d H:i:s');
+	$sql = "INSERT INTO invites (user_id, code, date, used) VALUES ('$user_id', '$randomString', '$stringDate', 0)";
+	$db->query($sql) or error('Unable to update user', __FILE__, __LINE__, $db->error());
+	redirect('profile.php?section=premium&amp;id='.$user_id, 'Invite created!'); //invite added!
+}
+// GIVE INVITE MODIFICATION
+
+// PURGE INVITE MODIFICATION
+
+else if (isset($_POST['purgeinvite'])) {
+	$user_id=$id;
+	if ($pun_user['g_id'] != PUN_ADMIN && ($pun_user['g_moderator'] != '1' || $pun_user['g_mod_ban_users'] == '0')) {
+	    message($lang_common['No permission']); //User don't have permission to do that
+	}
+	$sql = "DELETE FROM invites WHERE user_id='$user_id'";
+	$db->query($sql) or error('Unable to update user', __FILE__, __LINE__, $db->error());
+	redirect('profile.php?section=premium&amp;id='.$user_id, 'Invites purged!'); //invite purged!
+}
+
+// PURGE INVITE MODIFICATION
+
 else if (isset($_POST['ban']))
 {
 	if ($pun_user['g_id'] != PUN_ADMIN && ($pun_user['g_moderator'] != '1' || $pun_user['g_mod_ban_users'] == '0'))
@@ -1668,6 +1700,13 @@ else
 							} else {
 								echo "You have no unused invitation codes.";
 							}
+							if($pun_user['group_id'] == 1) {
+							?>
+							<br><br>
+							<input class="button" type="submit" name="generateinvite" value="Add">
+							<input class="button" type="submit" name="purgeinvite" value="Purge">
+							<?php
+							}
 							?>
 	                    </div>
                     </fieldset>
@@ -1976,6 +2015,29 @@ if ($pun_user['group_id'] == 1) {
 					<fieldset>
 						<legend>Subscription &amp; Invites</legend>
 						<div class="infldset">
+							<div class="inbox">
+								<table><thead>
+									<tr>
+									        <th class="tc3" scope="col">Invite</th>
+										<th class="tc3" scope="col">Generated for</th>
+										<th class="tc3" scope="col">Date</th>
+										<th class="tc3" scope="col">Used by</th>
+									</tr>
+									<?php 
+									//INVITES
+									$user_id = $id;
+									$user_gid = $db->query("SELECT * FROM invites WHERE user_id='$user_id'") or error('Unable to fetch current user', __FILE__, __LINE__, $db->error()); 
+									while($item = $db->fetch_assoc($user_gid)){?>
+									<tbody>
+										<td class="tc3"><?php echo $item['code']; ?></td>
+										<td class="tc3"><?php $user_name = $db->query("SELECT * FROM users WHERE id='$user_id'");$name = $db->fetch_assoc($user_name);echo $name['username']; ?></td>
+										<td class="tc3"><?php echo $item['date']; ?></td>
+										<td class="tc3"><?php echo $item['used_by'];?></td>
+									<?php }
+									//INVITES ?> 
+									</tbody>
+								</table></thead>
+								</div>
 							<label>Expire time<br><?php echo '<input class="button" id="sub" type="text" name="form[sub]" value="'.date('Y-m-d H:i:s').'" size="40" maxlength="75"><br></label>';?>
                             <p>Format: Y-m-d H:i:s</p>
 							<p>User subscription: <?php	
